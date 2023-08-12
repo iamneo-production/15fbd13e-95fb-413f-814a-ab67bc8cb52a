@@ -1,33 +1,56 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
+import { useState, useEffect } from 'react'
 import './App.css'
 
-function App() {
-  const [count, setCount] = useState(0)
+import Card from './components/Card'
 
+function App() {
+  const [cardData, setCardData] = useState(null)
+
+  useEffect(() => {
+    fetchCards()
+  },[])
+
+  const shuffle = (cards) => {
+    let randomIndex=0;
+    let temp;
+    for(let i=0;i<cards.length;i++){
+      randomIndex=Math.floor(Math.random()*cards.length)
+      // swap 
+      temp=cards[randomIndex]
+      cards[randomIndex]=cards[i]
+      cards[i]=temp
+    }
+    return cards
+  }
+
+  const fetchCards = () => {
+    try{
+      const url = 'http://localhost:8080/cards'
+      fetch(url)
+        .then(res => res.json())
+        // display cards 2 times
+        .then(data=>data.concat(data))
+        // shuffle the cards
+        .then(cards=>shuffle(cards))
+        .then(data => setCardData(data)).catch(err => console.log(err))
+       
+    } catch(err){
+      console.log(err)
+    }
+  }
+
+  const createGame = () => {
+    console.log("New Game created")
+  }
   return (
     <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+	    <div className="card-container">
+        {cardData && cardData.map((image, index) => 
+          <Card key={index} image={image}  />
+          )
+        }
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
+      <button onClick={createGame}>New Game</button>
     </>
   )
 }
