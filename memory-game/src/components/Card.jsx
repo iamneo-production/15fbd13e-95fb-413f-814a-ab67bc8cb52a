@@ -2,28 +2,30 @@ import React, {useState} from 'react'
 import '../styles/Card.css'
 import PlayCardImg from '../assets/images/playcard.png'
 
-const Card = ({image}) => {
+const Card = ({image, index, setOpenCards,isFlipped, handleCardClicked, isMatched}) => {
 
-	const [isFlipped, setIsFlipped] = useState(false)
+	// const [isFlipped, setIsFlipped] = useState(false)
 
-	const handleCardClicked = () => {
-		setIsFlipped(true)
+	const handleClick = () => {
+		!isFlipped && !isMatched && handleCardClicked(index)
 	}
 
-  return (
+
+	return (
 	<div className="card-grid">
-		<div className={`card ${isFlipped ? 'flipped' : ''}`} onClick={handleCardClicked}>
+		<div className={`card ${isFlipped || isMatched ? 'flipped' : ''}`} 
+			onClick={handleClick}>
 			<div className="front">
 				<img src={PlayCardImg}/>
 			</div>
 			<div className="back">
 				{/* back */}
-				{isFlipped && <img src={image.url} /> }
-				{/* <img ref={currentFlipped} src={image.url}/>  */}
+				{/* {isFlipped && <img src={image.url} alt='flipped image' /> } */}
+				<img src={image.url} alt='flipped image'/> 
 			</div>
 		</div>
 	</div>
-  )
+	)
 }
 
 export default Card
