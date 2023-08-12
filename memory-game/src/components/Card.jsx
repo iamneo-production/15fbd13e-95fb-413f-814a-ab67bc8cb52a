@@ -7,7 +7,7 @@ const Card = ({image}) => {
 	const [isFlipped, setIsFlipped] = useState(false)
 
 	const handleCardClicked = () => {
-		setIsFlipped(!isFlipped)
+		setIsFlipped(true)
 	}
 
   return (
@@ -18,10 +18,11 @@ const Card = ({image}) => {
 			</div>
 			<div className="back">
 				{/* back */}
-				<img src={image.url}/>
+				{isFlipped && <img src={image.url} /> }
+				{/* <img ref={currentFlipped} src={image.url}/>  */}
 			</div>
 		</div>
-  	</div>
+	</div>
   )
 }
 

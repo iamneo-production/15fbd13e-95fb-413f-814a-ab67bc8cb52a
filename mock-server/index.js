@@ -12,7 +12,9 @@ module.exports = () => {
     });
     
     rl.on('line', (line) => {
-        data.cards.push({ id: line.split("/")[4], url: line })
+        let name= line.split('/').slice(-1)[0].replace('.png','')
+        name = name.substring(name.indexOf("-")+1)
+        data.cards.push({ name, url: line })
     });
     
     rl.on('close', () => {
