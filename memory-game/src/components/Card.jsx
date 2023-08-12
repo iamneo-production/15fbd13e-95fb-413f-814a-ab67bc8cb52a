@@ -3,6 +3,7 @@ import '../styles/Card.css'
 import PlayCardImg from '../assets/images/playcard.png'
 
 const Card = ({image, index, setOpenCards,isFlipped, handleCardClicked, isMatched}) => {
+const Card = ({image, index, setOpenCards,isFlipped, handleCardClicked, isMatched}) => {
 
 	const handleClick = () => {
 		!isFlipped && !isMatched && handleCardClicked(index)
