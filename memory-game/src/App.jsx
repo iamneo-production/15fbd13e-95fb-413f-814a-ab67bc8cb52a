@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import Popup from './components/Popup'
 import './App.css'
 
 import Card from './components/Card'
@@ -9,7 +10,8 @@ function App() {
   const [openCards, setOpenCards] = useState([])
   // Stores matched cards 
   const [matchedCards,setMatchedCards] = useState([])
-
+  let score =  useRef(0);
+  const [isGameCompleted,setIsGameCompleted] = useState(false)
   
   useEffect(() => {
     fetchCards()
@@ -21,6 +23,7 @@ function App() {
       console.log(cardData[first],cardData[second])
       if(cardData[first].name === cardData[second].name){
         console.log("matched")
+        score.current++
         setMatchedCards((prev)=>[...prev,first,second])
       } 
       else {
@@ -29,8 +32,11 @@ function App() {
         setTimeout(()=>{setOpenCards([])},1000)
       }
     }
-
   }, [openCards])
+
+  useEffect(()=> {
+    checkGameCompleted()
+  },[matchedCards])
 
   const checkIfFlipped = (index) => {
     return openCards.includes(index)
@@ -66,8 +72,11 @@ function App() {
 
   const createGame = () => {
     console.log("New Game created")
+    setIsGameCompleted(false)
     setMatchedCards([])
     setOpenCards([])
+    score.current=0
+    setCardData(shuffle(cardData))
   }
 
   const handleCardClicked = (index) => {
@@ -78,21 +87,30 @@ function App() {
     }
 	}
 
+  const checkGameCompleted = () => {
+    if(matchedCards.length == cardData?.length){
+      console.log(openCards.length,matchedCards.length)
+      setIsGameCompleted(true);
+    }
+  }
+ 
   return (
     <>
 	    <div className="card-container">
         {cardData?.map((image, index) => 
           <Card key={index} 
-            image={image}
-            index={index}
-            setOpenCards={setOpenCards}
-            isFlipped={checkIfFlipped(index)}
-            isMatched={checkIfMatched(index)}
-            handleCardClicked={handleCardClicked}  />
+          image={image}
+          index={index}
+          setOpenCards={setOpenCards}
+          isFlipped={checkIfFlipped(index)}
+          isMatched={checkIfMatched(index)}
+          handleCardClicked={handleCardClicked}  />
           )
         }
       </div>
       <button onClick={createGame}>New Game</button>
+      {isGameCompleted && <Popup score={score.current} totalScore={cardData?.length/2} createGame={createGame} />}
+      
     </>
   )
 }
