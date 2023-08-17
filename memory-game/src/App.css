@@ -42,7 +42,7 @@
 }
 
 
-.card-container{
+/* .card-container{
   display:flex;
   flex-wrap: wrap;
   align-items: center ;
@@ -50,4 +50,9 @@
   margin: 0 auto;
   width: 50%;
   height: 50%;
+} */
+
+.card-container{
+  display: grid;
+  grid-template-columns: repeat(4, 150px);
 }
