@@ -1,4 +1,3 @@
-import React from 'react'
 import '../styles/Card.css'
 import PlayCardImg from '../assets/images/playcard.png'
 
