@@ -8,12 +8,13 @@ function App() {
   const [cardData, setCardData] = useState(null);
   // stores index of the cards open
   const [openCards, setOpenCards] = useState([]);
-  // Stores matched cards 
+  // Stores matched cards
   const [matchedCards, setMatchedCards] = useState([]);
   // Record moves
   let score = useRef(0);
   const [isGameCompleted, setIsGameCompleted] = useState(false);
-  
+  const [error, setError] = useState("");
+
   useEffect(() => {
     const fetchCards = () => {
       const url = "http://localhost:8080/cards";
@@ -57,9 +58,11 @@ function App() {
     checkGameCompleted();
   }, [matchedCards]);
 
-  useEffect(()=> {
-    checkGameCompleted()
-  },[matchedCards])
+  useEffect(() => {
+    setTimeout(() => {
+      setError("");
+    }, 3000);
+  }, [error]);
 
   const checkIfFlipped = (index) => {
     return openCards.includes(index);
@@ -74,7 +77,7 @@ function App() {
     let temp;
     for (let i = 0; i < cards.length; i++) {
       randomIndex = Math.floor(Math.random() * cards.length);
-      // swap 
+      // swap
       temp = cards[randomIndex];
       cards[randomIndex] = cards[i];
       cards[i] = temp;
@@ -103,18 +106,19 @@ function App() {
       setOpenCards([index]);
     }
   };
- 
+
   return (
     <>
-	    <div className="card-container">
+      {error}
+      <div className="card-container">
         {cardData?.map((image, index) => (
           <Card
             key={index}
             image={image.url}
-          index={index}
-          setOpenCards={setOpenCards}
-          isFlipped={checkIfFlipped(index)}
-          isMatched={checkIfMatched(index)}
+            index={index}
+            setOpenCards={setOpenCards}
+            isFlipped={checkIfFlipped(index)}
+            isMatched={checkIfMatched(index)}
             handleCardClicked={handleCardClicked}
           />
         ))}
