@@ -10,6 +10,7 @@ function App() {
   const [openCards, setOpenCards] = useState([])
   // Stores matched cards 
   const [matchedCards,setMatchedCards] = useState([])
+  // Record moves
   let score =  useRef(0);
   const [isGameCompleted,setIsGameCompleted] = useState(false)
   
@@ -81,8 +82,10 @@ function App() {
 
   const handleCardClicked = (index) => {
 		if(openCards.length==1){
+      score.current++
 			setOpenCards((prev) => [...prev,index] )
 		} else{
+      score.current++
       setOpenCards([index])
     }
 	}
@@ -109,7 +112,7 @@ function App() {
         }
       </div>
       <button onClick={createGame}>New Game</button>
-      {isGameCompleted && <Popup score={score.current} totalScore={cardData?.length/2} createGame={createGame} />}
+      {isGameCompleted && <Popup score={score.current} createGame={createGame} />}
       
     </>
   )
